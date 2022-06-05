@@ -320,9 +320,8 @@ def run_experiment(model):
         ],
     )
 
-    checkpoint_filepath = "savedmodel/checkpoint"
     checkpoint_callback = keras.callbacks.ModelCheckpoint(
-        checkpoint_filepath,
+        config.checkpoint_filepath,
         monitor="val_accuracy",
         save_best_only=True,
         save_weights_only=True,
