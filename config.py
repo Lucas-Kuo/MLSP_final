@@ -25,3 +25,6 @@ input_shape = (256, 256, 3)
 
 public_test_path = "./orchid_public_set"
 private_test_path = "./orchid_private_set"
+label_path = "./training/label.csv"
+training_orig_path = "./training"
+training_path = "./train"
