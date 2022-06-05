@@ -346,21 +346,21 @@ def run_experiment(model):
     return history
 
 
-cct_model = create_cct_model()
-history = run_experiment(cct_model)
+# cct_model = create_cct_model()
+# history = run_experiment(cct_model)
 
 """
 Let's now visualize the training progress of the model.
 """
 
-plt.plot(history.history["loss"], label="train_loss")
-plt.plot(history.history["val_loss"], label="val_loss")
-plt.xlabel("Epochs")
-plt.ylabel("Loss")
-plt.title("Train and Validation Losses Over Epochs", fontsize=14)
-plt.legend()
-plt.grid()
-plt.show()
+# plt.plot(history.history["loss"], label="train_loss")
+# plt.plot(history.history["val_loss"], label="val_loss")
+# plt.xlabel("Epochs")
+# plt.ylabel("Loss")
+# plt.title("Train and Validation Losses Over Epochs", fontsize=14)
+# plt.legend()
+# plt.grid()
+# plt.show()
 
 """
 The CCT model we just trained has just **0.4 million** parameters, and it gets us to
