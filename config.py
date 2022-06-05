@@ -29,7 +29,7 @@ private_test_path = "./orchid_private_set"
 label_path = "./training/label.csv"
 training_orig_path = "./training"
 training_path = "./train"
-
+checkpoint_filepath = "savedmodel/checkpoint"
 
 df = pd.read_csv(label_path)
 classes = df["category"].unique().tolist()
