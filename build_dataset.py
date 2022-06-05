@@ -9,7 +9,7 @@ df = pd.read_csv(config.label_path)
 
 for row in df.itertuples(index=False):
     # row[0] is filename and row[1] is category
-    target_dir = os.path.sep.join([config.training_path, row[1]])
+    target_dir = os.path.sep.join([config.training_path, str(row[1])])
     if not os.path.exists(target_dir):
         print("[INFO] creating '{}' directory".format(target_dir))
         os.makedirs(target_dir)
