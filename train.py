@@ -7,15 +7,17 @@ import matplotlib.pyplot as plt
 import config
 
 # for labeled images
-def load_images(imagePath):
+def load_images(imagePath, subset="training"):
     # pass in the image directory and set the class names
     return image_dataset_from_directory(
         imagePath, shuffle=True, labels='inferred', class_names=config.classes,
         label_mode="categorical", batch_size=config.batch_size,
+        validation_split=0.1, subset=subset, seed=0,
         image_size=(config.image_size, config.image_size))
 
 model = create_cct_model()
 train_dataset = load_images(config.training_path)
+val_dataset = load_images(config.training_path, subset="validation")
 
 optimizer = tfa.optimizers.AdamW(learning_rate=0.001, weight_decay=0.0001)
 
@@ -40,9 +42,9 @@ checkpoint_callback = keras.callbacks.ModelCheckpoint(
 
 history = model.fit(
     x=train_dataset,
+    validation_data=val_dataset,
     batch_size=config.batch_size,
     epochs=config.num_epochs,
-    validation_split=0.1,
     callbacks=[checkpoint_callback],
     verbose=1)
 
