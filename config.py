@@ -30,6 +30,7 @@ label_path = "./training/label.csv"
 training_orig_path = "./training"
 training_path = "./train"
 checkpoint_filepath = "savedmodel/checkpoint"
+result_pic_name = "training_curve.jpg"
 
 df = pd.read_csv(label_path)
 classes = df["category"].unique().tolist()
