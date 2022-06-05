@@ -48,43 +48,41 @@ import matplotlib.pyplot as plt
 import tensorflow_addons as tfa
 import tensorflow as tf
 import numpy as np
+import config
 
 """
 ## Hyperparameters and constants
 """
 
-positional_emb = True
-conv_layers = 2
-projection_dim = 128
+positional_emb = config.positional_emb
+conv_layers = config.conv_layers
+projection_dim = config.projection_dim
 
-num_heads = 2
-transformer_units = [
-    projection_dim,
-    projection_dim,
-]
-transformer_layers = 2
-stochastic_depth_rate = 0.1
+num_heads = config.projection_dim
+transformer_units = config.transformer_units
+transformer_layers = config.transformer_layers
+stochastic_depth_rate = config.stochastic_depth_rate
 
-learning_rate = 0.001
-weight_decay = 0.0001
-batch_size = 128
-num_epochs = 30
-image_size = 32
+learning_rate = config.learning_rate
+weight_decay = config.weight_decay
+batch_size = config.batch_size
+num_epochs = config.num_epochs
+image_size = config.image_size
 
 """
 ## Load CIFAR-10 dataset
 """
 
-num_classes = 10
-input_shape = (32, 32, 3)
+num_classes = config.num_classes
+input_shape = config.input_shape
 
-(x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
+# (x_train, y_train), (x_test, y_test) = keras.datasets.cifar10.load_data()
 
-y_train = keras.utils.to_categorical(y_train, num_classes)
-y_test = keras.utils.to_categorical(y_test, num_classes)
+# y_train = keras.utils.to_categorical(y_train, num_classes)
+# y_test = keras.utils.to_categorical(y_test, num_classes)
 
-print(f"x_train shape: {x_train.shape} - y_train shape: {y_train.shape}")
-print(f"x_test shape: {x_test.shape} - y_test shape: {y_test.shape}")
+# print(f"x_train shape: {x_train.shape} - y_train shape: {y_train.shape}")
+# print(f"x_test shape: {x_test.shape} - y_test shape: {y_test.shape}")
 
 """
 ## The CCT tokenizer
@@ -318,10 +316,11 @@ def run_experiment(model):
         metrics=[
             keras.metrics.CategoricalAccuracy(name="accuracy"),
             keras.metrics.TopKCategoricalAccuracy(5, name="top-5-accuracy"),
+            tfa.metrics.F1Score(config.num_classes, name="macro-F1-score")
         ],
     )
 
-    checkpoint_filepath = "/tmp/checkpoint"
+    checkpoint_filepath = "savedmodel/checkpoint"
     checkpoint_callback = keras.callbacks.ModelCheckpoint(
         checkpoint_filepath,
         monitor="val_accuracy",
@@ -338,10 +337,11 @@ def run_experiment(model):
         callbacks=[checkpoint_callback],
     )
 
-    model.load_weights(checkpoint_filepath)
-    _, accuracy, top_5_accuracy = model.evaluate(x_test, y_test)
-    print(f"Test accuracy: {round(accuracy * 100, 2)}%")
-    print(f"Test top 5 accuracy: {round(top_5_accuracy * 100, 2)}%")
+#     model.load_weights(checkpoint_filepath)
+#     _, accuracy, top_5_accuracy, f1_score = model.evaluate(x_test, y_test)
+#     print(f"Test accuracy: {round(accuracy * 100, 2)}%")
+#     print(f"Test Macro F1 score: {round(f1_score * 100, 2)}%")
+#     print(f"Test top 5 accuracy: {round(top_5_accuracy * 100, 2)}%")
 
     return history
 
