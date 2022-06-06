@@ -1,4 +1,4 @@
-from model import build_effarc_model
+from model import build_eff_model
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import tensorflow_addons as tfa
 import tensorflow as tf
@@ -15,7 +15,7 @@ def load_images(imagePath, subset="training"):
         validation_split=0.1, subset=subset, seed=0,
         image_size=(config.image_size, config.image_size))
 
-model = build_effarc_model()
+model = build_eff_model()
 train_dataset = load_images(config.training_path)
 val_dataset = load_images(config.training_path, subset="validation")
 
