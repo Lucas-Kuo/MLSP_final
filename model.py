@@ -30,6 +30,7 @@ def build_eff_model():
     x = base_model(x, training=False)  # set training to False to avoid BN training
     x = tf.keras.layers.AveragePooling2D(pool_size=(2, 2))(x)
     x = tf.keras.layers.Flatten()(x)
+    x = tf.keras.layers.Dense(256, activation='relu')(x)
     output = tf.keras.layers.Dense(config.num_classes, activation="softmax",
                                     activity_regularizer=tf.keras.regularizers.L2(0.1))(x)
     model = tf.keras.Model(inputs, output)
