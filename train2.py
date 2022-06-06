@@ -1,30 +1,39 @@
-from model import build_eff_model
+from cct import create_cct_model
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import tensorflow_addons as tfa
 import tensorflow as tf
 from tensorflow import keras
 import matplotlib.pyplot as plt
 import config
+import os
+
+# # for labeled images
+# def load_images(imagePath, subset="training"):
+#     # pass in the image directory and set the class names
+#     return image_dataset_from_directory(
+#         imagePath, shuffle=True, labels='inferred', class_names=config.classes,
+#         label_mode="categorical", batch_size=config.batch_size,
+#         validation_split=0.1, subset=subset, seed=0,
+#         image_size=(config.image_size, config.image_size))
 
 # for labeled images
-def load_images(imagePath, subset="training"):
+def load_images(imagePath):
     # pass in the image directory and set the class names
     return image_dataset_from_directory(
         imagePath, shuffle=True, labels='inferred', class_names=config.classes,
         label_mode="categorical", batch_size=config.batch_size,
-        validation_split=0.1, subset=subset, seed=0,
         image_size=(config.image_size, config.image_size))
 
-model = build_eff_model()
+model = create_cct_model()
 train_dataset = load_images(config.training_path)
-val_dataset = load_images(config.training_path, subset="validation")
+# val_dataset = load_images(config.training_path, subset="validation")
 
 optimizer = tfa.optimizers.AdamW(learning_rate=0.001, weight_decay=0.0001)
 
 model.compile(
         optimizer=optimizer,
         loss=keras.losses.CategoricalCrossentropy(
-            from_logits=False, label_smoothing=0.1
+            from_logits=True, label_smoothing=0.1
         ),
         metrics=[
             keras.metrics.CategoricalAccuracy(name="accuracy"),
@@ -40,16 +49,20 @@ checkpoint_callback = keras.callbacks.ModelCheckpoint(
     save_weights_only=True,
 )
 
+if os.path.exists(config.checkpoint_filepath):
+    print("[INFO]Loading weights")
+    model.load_weights(config.checkpoint_filepath)
+
 history = model.fit(
     x=train_dataset,
-    validation_data=val_dataset,
+    # validation_data=val_dataset,
     batch_size=config.batch_size,
     epochs=config.num_epochs,
-    callbacks=[checkpoint_callback],
+    # callbacks=[checkpoint_callback],
     verbose=1)
 
 plt.plot(history.history["loss"], label="train_loss")
-plt.plot(history.history["val_loss"], label="val_loss")
+# plt.plot(history.history["val_loss"], label="val_loss")
 plt.xlabel("Epochs")
 plt.ylabel("Loss")
 plt.title("Train and Validation Losses Over Epochs", fontsize=14)
