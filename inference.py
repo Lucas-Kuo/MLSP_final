@@ -54,4 +54,4 @@ for i in range(N):
 # create submission
 print("[INFO] creating submission file...")
 df = pd.DataFrame(data=result, columns=["filename", "category"])
-df.to_csv("submission.csv")
+df.to_csv("submission.csv",index=False)
