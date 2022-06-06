@@ -3,6 +3,7 @@ from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import os
 import pandas as pd
+import config
 
 def load_images(imagePath):
     # pass in the path of testing dataset
@@ -16,7 +17,7 @@ test_dataset = load_images(config.public_test_path)
 
 # construct model and load weights
 model = create_cct_model()
-model.load_weights(checkpoint_filepath)
+model.load_weights(config.checkpoint_filepath)
 
 # predictions for public test dataset
 print("[INFO] making public inferences...")
